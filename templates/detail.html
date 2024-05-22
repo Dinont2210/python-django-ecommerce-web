@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+{% block placeholder %}
+<div class="row justify-content-between" style="width: 80%; margin: 20px auto; border: 1px solid #ccc; padding: 20px;">
+    <div class="col-lg-5 mb-5 mb-lg-0">
+        <div class="grid grid-1" style="text-align: center;">
+            <img src="{% static 'images/' %}/{{ product.image_path }}" alt="Image" class="img-fluid mr-3 mt-1 mb-2" style="width: 2000px;">
+        </div>
+    </div>
+    <div class="col-lg-7 ps-lg-5" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;">
+        <h2 class="section-title mb-4" style="font-weight: bold;">{{product.product_name}}</h2>
+           
+        <h5>${{product.product_price_new}}</h5>
+        <h6 class="text-muted ml-2"><del>{{product.product.price}}</del></h6>
+        <ul class="list-unstyled custom-list my-4">
+        <p>Description</p> 
+            <li>ID : {{product.product_id}}</li>
+            {% if user.is_authenticated %}
+            <li>Quantity:{{product.product_quantity}}</a></li>
+            {% else %}
+            <li><a class="nav-link" href="/login"><img src="{% static 'images/user.svg' %}"></a></li>
+            {% endif %}
+            <li>This chair features a sleek, modern design</li>
+            <li>This chair providing a comfortable seating experience</li>
+            <li>The chair strikes the perfect balance between comfort and style</li>
+        </ul>
+        
+        {% comment %} <form method="POST" action="{% url 'core:add_to_cart' product_id=product.product_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.product_id }}">
+            <input type="hidden" name="quantity" value="1">
+            {% if user.is_authenticated %}
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            {% endif %}
+            <div class="input-group-btn">
+                <button class="btn btn-primary btn-plus" type="button">
+                    <i class="fa fa-plus"></i>
+                    Add to Cart
+                </button>
+            </div>
+        </form> {% endcomment %}
+        {% comment %} <form id="add-to-cart-form" method="POST" action="{% url 'core:add_to_cart' product_id=product.product_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.product_id }}">
+            <input type="hidden" name="quantity" value="1">
+            {% if user.is_authenticated %}
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            {% endif %}
+            <div class="input-group-btn">
+                <button class="btn btn-primary btn-plus" type="submit">
+                    <i class="fa fa-plus"></i>
+                    Add to Cart
+                </button>
+            </div>
+        </form>
+        
+
+        <form method="POST" action="{% url 'core:addfavorite' product_id=product.product_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.product_id }}">
+            {% if user.is_authenticated %}
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            {% endif %}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wH3F3EuYgpHptM0h0knM4ahTJdpmIWGvTWy/eRxGex6U5sFJYX+GpBo6YgYwZ0dLRqRzIfwUH4UqT7fK5a1jlw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <div class="input-group-btn">
+                <button class="btn btn-primary btn-favorite">
+                        <i class="fas fa-heart"></i>
+                        Add to Favorites
+                </button>
+            </div>
+        </form> {% endcomment %}
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="mb-4">Bình luận về sản phẩm</h4>
+              
+                <div class="comments-section border rounded p-3"> {% for comment in comments %}
+                    <div class="media mb-4">
+                      <div class="media-body">
+                        <h6>{{ comment.user_firstname }} {{ comment.user_lastname }} <small> - <i>{{ comment.date }}</i></small></h6>
+                        <p>{{ comment.comment }}</p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+              
+            <div class="col-md-6">
+                <h4 class="mb-1">Leave a review</h4>
+                <small>Your email address will not be published. Required fields are marked
+                    *</small>
+                <form method="post" action="/add-comment/{{product.product_id}}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="message">Your Review *</label>
+                        <textarea id="message" cols="30" rows="5" class="form-control" name="comment"></textarea>
+                    </div>
+                    <div class="form-group mb-0">
+                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                    </div>
+                </form>
+                <div class="col-md-10">
+                    <a href="/vote/1/{{product.product_id}}">1 sao</a>
+                    <a href="/vote/2/{{product.product_id}}">2 sao</a>
+                    <a href="/vote/3/{{product.product_id}}">3 sao</a>
+                    <a href="/vote/4/{{product.product_id}}">4 sao</a>
+                    <a href="/vote/5/{{product.product_id}}">5 sao</a>
+                </div>
+            </div>
+        </div>
+        <div class="rows">
+            <form id="add-to-cart-form" method="POST" action="{% url 'core:add_to_cart' product_id=product.product_id %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                <input type="hidden" name="quantity" value="1">
+                {% if user.is_authenticated %}
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                {% endif %}
+                <div class="input-group-btn">
+                    <div class="col">
+                        <button class="btn btn-primary btn-plus" type="submit">
+                    <div>
+                        <i class="fa fa-plus"></i>
+                        Add to Cart
+                    </button>
+                </div>
+            </form>
+        
+            <form method="POST" action="{% url 'core:addfavorite' product_id=product.product_id %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                {% if user.is_authenticated %}
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                {% endif %}
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-wH3F3EuYgpHptM0h0knM4ahTJdpmIWGvTWy/eRxGex6U5sFJYX+GpBo6YgYwZ0dLRqRzIfwUH4UqT7fK5a1jlw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                <div class="input-group-btn">
+                    <button class="btn btn-primary btn-favorite">
+                        <i class="fas fa-heart"></i>
+                        Add to Favorites
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Products Start -->
+<div class="container-fluid py-5">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Đề xuất cho bạn</span></h2>
+    <div class="row px-xl-5">
+        {% for product in product_recommend %}
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div class="product-item bg-light mb-4">
+                <div class="product-img position-relative overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static 'images/' %}{{ product.image_path }}" alt="">
+                    <div class="product-action">
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                    </div>
+                </div>
+                <div class="text-center py-4">
+                    <a class="h5 text-decoration-none text-truncate" href="/product/{{ product.product_id }}">{{ product.product_name }}</a>
+                    <div class="d-flex align-items-center justify-content-center mt-2">
+                        <h5>${{ product.product_price_new}}</h5>
+                        <h6 class="text-muted ml-2"><del>{{ product.product_price}}</del></h6>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-1">
+                        <a style="display: inline; color: black;" class="mr-1">({{product.type}})</a>
+                        <a style="display: inline;">({{ product.calculate_average_rating}}) </a><small style="color: #ffe000;" class="fas fa-star"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Products End -->
+<!-- Products Start -->
+<div class="container-fluid py-5">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Các sản phẩm khác</span></h2>
+    <div class="row px-xl-5">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <div class="product-item bg-light mb-4">
+                <div class="product-img position-relative overflow-hidden">
+                    <img class="img-fluid w-100" src="{% static '/images/' %}{{ item.image_path }}" alt="">
+                    <div class="product-action">
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                    </div>
+                </div>
+                <div class="text-center py-4">
+                    <a class="h5 text-decoration-none text-truncate" href="/product/{{ product.product_id }}">{{ product.product_name }}</a>
+                    <div class="d-flex align-items-center justify-content-center mt-2">
+                        <h5>{{ product.product_price_new}}</h5>
+                        <h6 class="text-muted ml-2"><del>{{ product.product_price}}</del></h6>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-1">
+                        <a style="display: inline; color: black;" class="mr-1">({{product.type}})</a>
+                        <a style="display: inline;">({{ product.calculate_average_rating}}) </a><small style="color: #ffe000;" class="fas fa-star"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Products End -->
+
+{% endblock %}
